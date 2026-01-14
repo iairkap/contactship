@@ -1,99 +1,408 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Contactship-Mini Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para gestión y sincronización automatizada de leads con Inteligencia Artificial.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Stack Tecnológico
 
-## Description
+- **Framework:** NestJS (TypeScript)
+- **ORM:** Prisma 5.22.0
+- **Base de Datos:** PostgreSQL (Supabase)
+- **Cache:** Redis 8.4.0
+- **Colas:** BullMQ
+- **Scheduler:** @nestjs/schedule
+- **IA:** Google Gemini 1.5 Flash (API gratuita)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📋 Requisitos Previos
 
-## Project setup
+- Node.js v20.8.0 o superior
+- npm v10.8.1 o superior
+- Redis instalado y corriendo
+- Cuenta de Supabase (gratuita)
+- API Key de Google Gemini (gratuita)
+
+## ⚙️ Instalación
+
+### 1. Clonar el repositorio
 
 ```bash
-$ npm install
+git clone <url-repositorio>
+cd contactship
 ```
 
-## Compile and run the project
+### 2. Instalar dependencias
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 3. Configurar variables de entorno
+
+Crear archivo `.env` en la raíz del proyecto:
+
+```env
+# Database - Supabase
+DATABASE_URL="postgresql://postgres.kukqzqbydfbljeeyxzag:[PASSWORD]@aws-1-us-east-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
+DIRECT_URL="postgresql://postgres.kukqzqbydfbljeeyxzag:[PASSWORD]@aws-1-us-east-2.pooler.supabase.com:5432/postgres"
+
+# API Security
+API_KEY="tu-api-key-aqui"
+
+# Application
+PORT=3000
+
+# Redis Configuration
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# Google Gemini AI
+GOOGLE_AI_API_KEY="tu-google-ai-api-key"
+```
+
+### 4. Instalar y ejecutar Redis
+
+**macOS (con Homebrew):**
+```bash
+brew install redis
+brew services start redis
+```
+
+**Verificar que Redis está corriendo:**
+```bash
+redis-cli ping
+# Debe responder: PONG
+```
+
+### 5. Ejecutar migraciones de base de datos
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npx prisma migrate dev
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 6. Generar cliente de Prisma
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+npx prisma generate
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 🏃 Ejecución
 
-## Resources
+### Modo desarrollo (con hot-reload)
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+npm run start:dev
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Modo producción
 
-## Support
+```bash
+npm run build
+npm run start:prod
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+La aplicación estará disponible en: `http://localhost:3000`
 
-## Stay in touch
+## 📡 API Endpoints
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Todos los endpoints requieren el header `x-api-key` con tu API key configurada en `.env`.
 
-## License
+### 1. Crear Lead Manual
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+**Endpoint:** `POST /create-lead`
+
+**Headers:**
+```
+Content-Type: application/json
+x-api-key: tu-api-key-aqui
+```
+
+**Body:**
+```json
+{
+  "email": "john@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phone": "+1234567890",  // Opcional
+  "city": "New York",      // Opcional
+  "country": "USA"         // Opcional
+}
+```
+
+**Respuesta exitosa (201):**
+```json
+{
+  "id": "uuid-generado",
+  "email": "john@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phone": "+1234567890",
+  "city": "New York",
+  "country": "USA",
+  "summary": null,
+  "nextAction": null,
+  "createdAt": "2026-01-14T20:00:00.000Z",
+  "updatedAt": "2026-01-14T20:00:00.000Z"
+}
+```
+
+**Respuesta de error - Email duplicado (409):**
+```json
+{
+  "statusCode": 409,
+  "message": "Lead with this email already exists"
+}
+```
+
+### 2. Listar Todos los Leads
+
+**Endpoint:** `GET /leads`
+
+**Headers:**
+```
+x-api-key: tu-api-key-aqui
+```
+
+**Respuesta exitosa (200):**
+```json
+[
+  {
+    "id": "uuid-1",
+    "email": "john@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    ...
+  },
+  {
+    "id": "uuid-2",
+    "email": "maria@example.com",
+    "firstName": "Maria",
+    "lastName": "Garcia",
+    ...
+  }
+]
+```
+
+### 3. Obtener Lead por ID (con Caché)
+
+**Endpoint:** `GET /leads/:id`
+
+**Headers:**
+```
+x-api-key: tu-api-key-aqui
+```
+
+**Respuesta exitosa (200):**
+```json
+{
+  "id": "uuid-del-lead",
+  "email": "john@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phone": "+1234567890",
+  "city": "New York",
+  "country": "USA",
+  "summary": "Lead potencial interesado en servicios tech",
+  "nextAction": "Contactar por email para agendar llamada",
+  "createdAt": "2026-01-14T20:00:00.000Z",
+  "updatedAt": "2026-01-14T20:05:00.000Z"
+}
+```
+
+**Respuesta de error - No encontrado (404):**
+```json
+{
+  "statusCode": 404,
+  "message": "Lead with ID xxx not found"
+}
+```
+
+**Nota:** Este endpoint implementa **Cache-Aside**:
+- Primera consulta: busca en DB y guarda en Redis (TTL: 5 min)
+- Siguientes consultas: retorna desde Redis (más rápido)
+- El caché se invalida al hacer summarize
+
+### 4. Generar Resumen con IA
+
+**Endpoint:** `POST /leads/:id/summarize`
+
+**Headers:**
+```
+x-api-key: tu-api-key-aqui
+```
+
+**Respuesta exitosa (200):**
+```json
+{
+  "id": "uuid-del-lead",
+  "email": "john@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "summary": "Lead potencial de Nueva York con experiencia en tecnología",
+  "nextAction": "Contactar por email para presentar propuesta de servicios",
+  ...
+}
+```
+
+**Nota:** 
+- Genera `summary` y `nextAction` usando Google Gemini
+- Actualiza el lead en la base de datos
+- Invalida el caché automáticamente
+
+## 🧪 Testing Manual con cURL
+
+### Ejemplo completo de flujo:
+
+```bash
+# 1. Crear un lead
+curl -X POST 'http://localhost:3000/create-lead' \
+  -H 'Content-Type: application/json' \
+  -H 'x-api-key: tu-api-key-aqui' \
+  -d '{
+    "email": "test@example.com",
+    "firstName": "Test",
+    "lastName": "User",
+    "city": "Madrid",
+    "country": "Spain"
+  }'
+
+# Respuesta: guarda el "id" del lead creado
+
+# 2. Listar todos los leads
+curl -X GET 'http://localhost:3000/leads' \
+  -H 'x-api-key: tu-api-key-aqui'
+
+# 3. Obtener detalle de un lead (reemplaza :id)
+curl -X GET 'http://localhost:3000/leads/<ID-DEL-LEAD>' \
+  -H 'x-api-key: tu-api-key-aqui'
+
+# 4. Generar resumen con IA (reemplaza :id)
+curl -X POST 'http://localhost:3000/leads/<ID-DEL-LEAD>/summarize' \
+  -H 'x-api-key: tu-api-key-aqui'
+
+# 5. Verificar que el lead ahora tiene summary y nextAction
+curl -X GET 'http://localhost:3000/leads/<ID-DEL-LEAD>' \
+  -H 'x-api-key: tu-api-key-aqui'
+```
+
+## ⏰ Sincronización Automática (CRON)
+
+El sistema importa automáticamente 10 leads desde `randomuser.me` cada hora.
+
+**Configuración:**
+- CRON: `@Cron(CronExpression.EVERY_HOUR)`
+- API: https://randomuser.me/api/?results=10
+- Deduplicación: Por email único
+- Cola: BullMQ con Redis
+
+**Logs del scheduler:**
+```
+[LeadsSyncScheduler] Starting scheduled leads import job
+[LeadsSyncScheduler] Leads import job queued successfully
+[LeadsImportProcessor] Processing job xxx: importing leads from randomuser.me
+[LeadsImportProcessor] Import completed: 8 imported, 2 duplicates skipped
+```
+
+## 🗄️ Base de Datos
+
+### Modelo Lead (Prisma Schema)
+
+```prisma
+model Lead {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  firstName  String
+  lastName   String
+  phone      String?
+  city       String?
+  country    String?
+  summary    String?  @db.Text
+  nextAction String?  @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt()
+
+  @@map("leads")
+}
+```
+
+### Comandos útiles de Prisma
+
+```bash
+# Ver base de datos en Prisma Studio
+npx prisma studio
+
+# Crear nueva migración
+npx prisma migrate dev --name nombre-migracion
+
+# Resetear base de datos (¡CUIDADO! Borra todos los datos)
+npx prisma migrate reset
+```
+
+## 🔐 Seguridad
+
+### API Key Guard
+
+Todos los endpoints están protegidos con un Guard de API Key:
+
+```typescript
+// Header requerido en todas las peticiones
+x-api-key: tu-api-key-desde-env
+```
+
+**Sin API Key:**
+```json
+{
+  "statusCode": 401,
+  "message": "Invalid or missing API Key"
+}
+```
+
+## 🎯 Características Implementadas
+
+- ✅ CRUD de leads con validación (DTOs + class-validator)
+- ✅ Deduplicación por email único
+- ✅ Autenticación con API Key
+- ✅ Sincronización automática con CRON (cada hora)
+- ✅ Cola de trabajos asíncrona con BullMQ
+- ✅ Caché con Redis (estrategia Cache-Aside)
+- ✅ Integración con Google Gemini IA
+- ✅ Generación de resúmenes y acciones con IA
+- ✅ Persistencia en PostgreSQL (Supabase)
+
+## 🐛 Troubleshooting
+
+### Error: "Cannot connect to Redis"
+
+```bash
+# Verificar que Redis esté corriendo
+redis-cli ping
+
+# Si no responde, iniciar Redis
+brew services start redis
+```
+
+### Error: "Invalid or missing API Key"
+
+- Verifica que el archivo `.env` tenga la variable `API_KEY` configurada
+- Asegúrate de incluir el header `x-api-key` en tus peticiones
+
+### Error: "Prisma Client is not generated"
+
+```bash
+npx prisma generate
+```
+
+### Error 500 en endpoint de IA
+
+- Verifica que `GOOGLE_AI_API_KEY` esté configurada en `.env`
+- Confirma que la API key de Google Gemini sea válida
+- Revisa los logs del servidor para más detalles
+
+## 📚 Documentación Adicional
+
+- [NestJS Documentation](https://docs.nestjs.com/)
+- [Prisma Documentation](https://www.prisma.io/docs)
+- [BullMQ Documentation](https://docs.bullmq.io/)
+- [Google Gemini API](https://ai.google.dev/docs)
+
+## 📝 Licencia
+
+MIT
