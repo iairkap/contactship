@@ -17,6 +17,7 @@ const leads_service_1 = require("./leads.service");
 const random_user_service_1 = require("./random-user.service");
 const leads_import_processor_1 = require("./leads-import.processor");
 const leads_sync_scheduler_1 = require("./leads-sync.scheduler");
+const ai_service_1 = require("./ai.service");
 let LeadsModule = class LeadsModule {
 };
 exports.LeadsModule = LeadsModule;
@@ -44,6 +45,7 @@ exports.LeadsModule = LeadsModule = __decorate([
             random_user_service_1.RandomUserService,
             leads_import_processor_1.LeadsImportProcessor,
             leads_sync_scheduler_1.LeadsSyncScheduler,
+            ai_service_1.AiService,
         ],
     })
 ], LeadsModule);

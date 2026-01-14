@@ -4,12 +4,14 @@ import { Cache } from 'cache-manager';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { LeadResponseDto } from './dto/lead-response.dto';
+import { AiService } from './ai.service';
 
 @Injectable()
 export class LeadsService {
   constructor(
     private prisma: PrismaService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private aiService: AiService,
   ) {}
 
   async create(createLeadDto: CreateLeadDto): Promise<LeadResponseDto> {
@@ -58,5 +60,41 @@ export class LeadsService {
     await this.cacheManager.set(cacheKey, lead);
 
     return lead;
+  }
+
+  async summarize(id: string): Promise<LeadResponseDto> {
+    // 1. Buscar lead
+    const lead = await this.prisma.lead.findUnique({
+      where: { id },
+    });
+
+    if (!lead) {
+      throw new NotFoundException(`Lead with ID ${id} not found`);
+    }
+
+    // 2. Generar resumen con IA
+    const aiResult = await this.aiService.generateLeadSummary({
+      firstName: lead.firstName,
+      lastName: lead.lastName,
+      email: lead.email,
+      phone: lead.phone,
+      city: lead.city,
+      country: lead.country,
+    });
+
+    // 3. Actualizar en DB
+    const updatedLead = await this.prisma.lead.update({
+      where: { id },
+      data: {
+        summary: aiResult.summary,
+        nextAction: aiResult.next_action,
+      },
+    });
+
+    // 4. Invalidar cache
+    const cacheKey = `lead:${id}`;
+    await this.cacheManager.del(cacheKey);
+
+    return updatedLead;
   }
 }

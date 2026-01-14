@@ -24,4 +24,9 @@ export class LeadsController {
   async findOne(@Param('id') id: string): Promise<LeadResponseDto> {
     return this.leadsService.findOne(id);
   }
+
+  @Post('leads/:id/summarize')
+  async summarize(@Param('id') id: string): Promise<LeadResponseDto> {
+    return this.leadsService.summarize(id);
+  }
 }

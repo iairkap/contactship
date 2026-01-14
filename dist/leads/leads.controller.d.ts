@@ -7,4 +7,5 @@ export declare class LeadsController {
     create(createLeadDto: CreateLeadDto): Promise<LeadResponseDto>;
     findAll(): Promise<LeadResponseDto[]>;
     findOne(id: string): Promise<LeadResponseDto>;
+    summarize(id: string): Promise<LeadResponseDto>;
 }

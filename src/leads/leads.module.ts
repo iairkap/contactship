@@ -8,6 +8,7 @@ import { LeadsService } from './leads.service';
 import { RandomUserService } from './random-user.service';
 import { LeadsImportProcessor } from './leads-import.processor';
 import { LeadsSyncScheduler } from './leads-sync.scheduler';
+import { AiService } from './ai.service';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { LeadsSyncScheduler } from './leads-sync.scheduler';
     RandomUserService,
     LeadsImportProcessor,
     LeadsSyncScheduler,
+    AiService,
   ],
 })
 export class LeadsModule {}

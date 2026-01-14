@@ -30,6 +30,9 @@ let LeadsController = class LeadsController {
     async findOne(id) {
         return this.leadsService.findOne(id);
     }
+    async summarize(id) {
+        return this.leadsService.summarize(id);
+    }
 };
 exports.LeadsController = LeadsController;
 __decorate([
@@ -53,6 +56,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], LeadsController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Post)('leads/:id/summarize'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], LeadsController.prototype, "summarize", null);
 exports.LeadsController = LeadsController = __decorate([
     (0, common_1.Controller)(),
     (0, common_1.UseGuards)(api_key_guard_1.ApiKeyGuard),

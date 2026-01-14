@@ -16,10 +16,12 @@ exports.LeadsService = void 0;
 const common_1 = require("@nestjs/common");
 const cache_manager_1 = require("@nestjs/cache-manager");
 const prisma_service_1 = require("../prisma/prisma.service");
+const ai_service_1 = require("./ai.service");
 let LeadsService = class LeadsService {
-    constructor(prisma, cacheManager) {
+    constructor(prisma, cacheManager, aiService) {
         this.prisma = prisma;
         this.cacheManager = cacheManager;
+        this.aiService = aiService;
     }
     async create(createLeadDto) {
         try {
@@ -57,11 +59,37 @@ let LeadsService = class LeadsService {
         await this.cacheManager.set(cacheKey, lead);
         return lead;
     }
+    async summarize(id) {
+        const lead = await this.prisma.lead.findUnique({
+            where: { id },
+        });
+        if (!lead) {
+            throw new common_1.NotFoundException(`Lead with ID ${id} not found`);
+        }
+        const aiResult = await this.aiService.generateLeadSummary({
+            firstName: lead.firstName,
+            lastName: lead.lastName,
+            email: lead.email,
+            phone: lead.phone,
+            city: lead.city,
+            country: lead.country,
+        });
+        const updatedLead = await this.prisma.lead.update({
+            where: { id },
+            data: {
+                summary: aiResult.summary,
+                nextAction: aiResult.next_action,
+            },
+        });
+        const cacheKey = `lead:${id}`;
+        await this.cacheManager.del(cacheKey);
+        return updatedLead;
+    }
 };
 exports.LeadsService = LeadsService;
 exports.LeadsService = LeadsService = __decorate([
     (0, common_1.Injectable)(),
     __param(1, (0, common_1.Inject)(cache_manager_1.CACHE_MANAGER)),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService, Object])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, Object, ai_service_1.AiService])
 ], LeadsService);
 //# sourceMappingURL=leads.service.js.map
