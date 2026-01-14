@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Lead {
+  id        String   @id @default(uuid())
+  email     String   @unique // Deduplicación por email
+  firstName String   @map("first_name")
+  lastName  String   @map("last_name")
+  phone     String?
+  city      String?
+  country   String?
+  
+  // Campos para IA
+  summary    String?  @db.Text
+  nextAction String?  @map("next_action") @db.Text
+  
+  // Metadata
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("leads")
+}
