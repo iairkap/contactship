@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LeadsService } from './leads.service';
 import { CreateLeadDto } from './dto/create-lead.dto';
 import { LeadResponseDto } from './dto/lead-response.dto';
@@ -18,5 +18,10 @@ export class LeadsController {
   @Get('leads')
   async findAll(): Promise<LeadResponseDto[]> {
     return this.leadsService.findAll();
+  }
+
+  @Get('leads/:id')
+  async findOne(@Param('id') id: string): Promise<LeadResponseDto> {
+    return this.leadsService.findOne(id);
   }
 }
